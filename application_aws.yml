@@ -1,0 +1,26 @@
+
+app: 
+  datasource: 
+    jdbcUrl: jdbc:h2:~/extracts-webservice;AUTO_SERVER=TRUE
+    username: sa
+    password: 
+
+server: 
+  port: 8090
+
+chainrpc: 
+  host: localhost
+  port: 4358
+  chainName: registryv3
+  username: multichainrpc
+  password: 5tr7nvp6AwrubikMwgwNYvRNsBBU3hGVjCFie7Wxrn5F
+  mode: REGISTER
+  multichainCli: /home/jboss/extracts-poc/multichain-1.0-beta-1/multichain-cli
+  multichainD: /home/jboss/extracts-poc/multichain-1.0-beta-1/multichaind
+  multichainUtil: /home/jboss/extracts-poc/multichain-1.0-beta-1/multichain-util
+
+remote: 
+  datasource: 
+    jdbcUrl: jdbc:oracle:thin:@192.168.32.51:1521:xe
+    username: CSD
+    password: CSD
