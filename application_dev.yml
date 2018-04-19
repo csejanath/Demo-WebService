@@ -18,6 +18,7 @@ chainrpc:
   multichainCli: /home/jboss/extracts-poc/multichain-1.0-beta-1/multichain-cli
   multichainD: /home/jboss/extracts-poc/multichain-1.0-beta-1/multichaind
   multichainUtil: /home/jboss/extracts-poc/multichain-1.0-beta-1/multichain-util
+  publicKey : 16SwYKazYw2sonfFmFSEQCfyoc6b6Gsjeo5VGY
 
 remote: 
   datasource: 

@@ -10,10 +10,10 @@ server:
 
 chainrpc: 
   host: localhost
-  port: 4358
+  port: 2910
   chainName: registryv3
   username: multichainrpc
-  password: 5tr7nvp6AwrubikMwgwNYvRNsBBU3hGVjCFie7Wxrn5F
+  password: AqvnFYJaLsfMe9A9TDHeoHfgDncPppqJGai52yZtvoP
   mode: REGISTER
   multichainCli: /home/jboss/extracts-poc/multichain-1.0-beta-1/multichain-cli
   multichainD: /home/jboss/extracts-poc/multichain-1.0-beta-1/multichaind

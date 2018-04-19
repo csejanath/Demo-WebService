@@ -110,7 +110,7 @@ public class Registry extends ChainUrl {
 	  }
 	  
 	  public RpcResult list() throws IOException, URISyntaxException {
-		return liststreampublisheritems(this, streamName, "1BoGEjtHPuG3KG95PdtxVamnxNffrWqieADRTh", true, null, null);
+		return liststreampublisheritems(this, streamName, publicKey, true, null, null);
 	  }
 
 	  public String getStreamName() {
