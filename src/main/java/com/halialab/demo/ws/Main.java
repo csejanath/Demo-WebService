@@ -9,6 +9,7 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.boot.web.servlet.support.SpringBootServletInitializer;
 import org.springframework.context.annotation.Bean;
@@ -37,7 +38,10 @@ public class Main extends SpringBootServletInitializer {
 		SpringApplication.run(Main.class, args);
 	}
 	
-
+	@Override
+	protected SpringApplicationBuilder configure(SpringApplicationBuilder builder) {
+		return builder.sources(Main.class);
+	}
 	  
 //	  @Bean
 //	  public Asset asset(ChainRpcProperties chainRpcProperties) throws IOException, URISyntaxException {
@@ -83,10 +87,16 @@ public class Main extends SpringBootServletInitializer {
 	@Bean
 	public CommandLineRunner studentDemo(UserRepository urepository) {
 		return (args) -> {
+//			User user1 = new User("user", "$2a$06$3jYRJrg0ghaaypjZ/.g4SethoeA51ph3UD4kZi9oPkeMTpjKU5uo6", "USER",
+//					"16SwYKazYw2sonfFmFSEQCfyoc6b6Gsjeo5VGY");
+//			User user2 = new User("admin", "$2a$10$0MMwY.IQqpsVc1jC8u7IJ.2rT8b0Cd3b3sfIBGV2zfgnPGtT4r0.C", "ADMIN",
+//					"1TKNkCAnzfb1AmQDQ9KTKmUAWnRNLH26h7ZERs");
+
+			// For AWS
 			User user1 = new User("user", "$2a$06$3jYRJrg0ghaaypjZ/.g4SethoeA51ph3UD4kZi9oPkeMTpjKU5uo6", "USER",
-					"16SwYKazYw2sonfFmFSEQCfyoc6b6Gsjeo5VGY");
+					"1ThRZzL3i4Zc96japNbDWA3sxGUxnWCKgfq1so");
 			User user2 = new User("admin", "$2a$10$0MMwY.IQqpsVc1jC8u7IJ.2rT8b0Cd3b3sfIBGV2zfgnPGtT4r0.C", "ADMIN",
-					"1TKNkCAnzfb1AmQDQ9KTKmUAWnRNLH26h7ZERs");
+					"1PysmGFApqSXvnKTuiQ2F3bYcKp1ziTPnZzLRs");
 			urepository.save(user1);
 			urepository.save(user2);
 

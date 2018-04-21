@@ -3,6 +3,7 @@
  */
 package com.halialab.demo.ws.controllers;
 
+import static com.halialab.demo.util.GsonUtils.toJson;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
@@ -36,7 +37,7 @@ public class LoginController {
 		if (!(auth instanceof AnonymousAuthenticationToken)) {
 			LOGGER.info("############### loginSuccess - Athenticated #####################" + auth.getName());
 //	         userDetails = auth.getPrincipal()
-			return auth.getName();
+			return toJson(auth.getPrincipal());
 		}
 
 		return null;
