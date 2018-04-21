@@ -18,7 +18,9 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.halialab.demo.domain.User;
 import com.halialab.demo.domain.UserRepository;
+import com.halialab.demo.registry.Asset;
 import com.halialab.demo.registry.Registry;
+import com.halialab.demo.service.ChainService;
 import com.halialab.demo.ws.pojo.ChainRpcProperties;
 
 /**
@@ -29,53 +31,66 @@ import com.halialab.demo.ws.pojo.ChainRpcProperties;
 @EnableConfigurationProperties(ChainRpcProperties.class)
 public class Main extends SpringBootServletInitializer {
 	
-	  private static final Logger LOGGER = LoggerFactory.getLogger(Main.class);
+	private static final Logger LOGGER = LoggerFactory.getLogger(Main.class);
 	
 	public static void main(String[] args) throws Exception {
 		SpringApplication.run(Main.class, args);
 	}
 	
-	  @Bean
-	  public Registry registry(ChainRpcProperties chainRpcProperties) throws IOException, URISyntaxException {
-	    Registry registry = new Registry(
-	        chainRpcProperties.getHost(), 
-	        chainRpcProperties.getPort(), 
-	        chainRpcProperties.getChainName(), 
-	        chainRpcProperties.getUsername(), 
-	        chainRpcProperties.getPassword(), 
-	        chainRpcProperties.getStreamName());
-	    if (chainRpcProperties.getProtocol() != null) {      
-	      registry.setProtocol(chainRpcProperties.getProtocol());
-	    }
-	    
-	    if (chainRpcProperties.getPublicKey()  != null) {
-	      registry.setPublicKey(chainRpcProperties.getPublicKey());
-	    }
-	    
-	    try {
-	      registry.initStream();
-	    } catch (Exception e) {
-	      LOGGER.error(e.getMessage(), e);
-	      
-	      // maybe it's not yet created?
-	      
-	      
-	      registry.safeInitStream();
-	      
-	    }
-	    
-	    return registry;
-	  }
+
 	  
-		@Bean
-		public CommandLineRunner studentDemo(UserRepository urepository) {
-			return (args) -> {
-				User user1 = new User("user", "$2a$06$3jYRJrg0ghaaypjZ/.g4SethoeA51ph3UD4kZi9oPkeMTpjKU5uo6", "USER");
-				User user2 = new User("admin", "$2a$10$0MMwY.IQqpsVc1jC8u7IJ.2rT8b0Cd3b3sfIBGV2zfgnPGtT4r0.C", "ADMIN");
-				urepository.save(user1);
-				urepository.save(user2);
-		    	
-		    };
-		}	
+//	  @Bean
+//	  public Asset asset(ChainRpcProperties chainRpcProperties) throws IOException, URISyntaxException {
+//		  Asset asset = new Asset(
+//	        chainRpcProperties.getHost(), 
+//	        chainRpcProperties.getPort(), 
+//	        chainRpcProperties.getChainName(), 
+//	        chainRpcProperties.getUsername(), 
+//	        chainRpcProperties.getPassword());
+//		  
+//	    if (chainRpcProperties.getProtocol() != null) {      
+//	    	asset.setProtocol(chainRpcProperties.getProtocol());
+//	    }
+//	    
+//	    return asset;
+//	  }
+	  
+	@Bean
+	public ChainService chainService(ChainRpcProperties chainRpcProperties) { 
+		Registry registry = new Registry(chainRpcProperties.getHost(), chainRpcProperties.getPort(),
+				chainRpcProperties.getChainName(), chainRpcProperties.getUsername(), chainRpcProperties.getPassword(),
+				chainRpcProperties.getStreamName());
+		if (chainRpcProperties.getProtocol() != null) {
+			registry.setProtocol(chainRpcProperties.getProtocol());
+		}
+
+		if (chainRpcProperties.getPublicKey() != null) {
+			registry.setPublicKey(chainRpcProperties.getPublicKey());
+		}
+		ChainService chainService = new ChainService(registry);
+		try {
+			chainService.initStream();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (URISyntaxException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return chainService;
+	}
+	  
+	@Bean
+	public CommandLineRunner studentDemo(UserRepository urepository) {
+		return (args) -> {
+			User user1 = new User("user", "$2a$06$3jYRJrg0ghaaypjZ/.g4SethoeA51ph3UD4kZi9oPkeMTpjKU5uo6", "USER",
+					"16SwYKazYw2sonfFmFSEQCfyoc6b6Gsjeo5VGY");
+			User user2 = new User("admin", "$2a$10$0MMwY.IQqpsVc1jC8u7IJ.2rT8b0Cd3b3sfIBGV2zfgnPGtT4r0.C", "ADMIN",
+					"1TKNkCAnzfb1AmQDQ9KTKmUAWnRNLH26h7ZERs");
+			urepository.save(user1);
+			urepository.save(user2);
+
+		};
+	}
 
 }

@@ -51,7 +51,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 			.antMatchers("/registry/**").authenticated()
 			.anyRequest().permitAll()
 			.and().formLogin().loginPage("/login").successForwardUrl("/login/success").permitAll()
-			.and().logout().logoutSuccessUrl("/login?logout");
+			.and().logout().logoutSuccessUrl("/login").deleteCookies("JSESSIONID");
 	}
 	
     @Autowired

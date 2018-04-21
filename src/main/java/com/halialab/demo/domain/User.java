@@ -33,14 +33,19 @@ public class User {
     @Column(name = "role", nullable = false)
     private String role;
     
+    @JsonIgnore
+    @Column(name = "address", nullable = false)
+    private String address;
+    
     public User() {
     }
 
-	public User(String username, String passwordHash, String role) {
+	public User(String username, String passwordHash, String role, String address) {
 		super();
 		this.username = username;
 		this.passwordHash = passwordHash;
 		this.role = role;
+		this.address = address;
 	}
 
 	public Long getId() {
@@ -73,6 +78,20 @@ public class User {
 
 	public void setRole(String role) {
 		this.role = role;
+	}
+
+	/**
+	 * @return the address
+	 */
+	public String getAddress() {
+		return address;
+	}
+
+	/**
+	 * @param address the address to set
+	 */
+	public void setAddress(String address) {
+		this.address = address;
 	}
 
 }

@@ -33,7 +33,7 @@ public class Registry extends ChainUrl {
 	  public static final String DEFAULT_STREAM_NAME = "TC_REG";
 	  
 	  private boolean init = false;
-	  private final String streamName;
+	  private String streamName;
 	  private String publicKey;
 	  
 	  public Registry(String host, int port, String chainName, String username, String password) {
@@ -94,9 +94,9 @@ public class Registry extends ChainUrl {
 	   * @throws IOException
 	   * @throws URISyntaxException
 	   */
-	  public RpcResult registerFile(String hash, Object metadata) throws IOException, URISyntaxException {
+	  public RpcResult registerFile(String hash, Object metadata, String address) throws IOException, URISyntaxException {
 	    initStream();
-	    return publish(this, publicKey, streamName, hash.toLowerCase(), GsonUtils.toJson(metadata));
+	    return publish(this, address, streamName, hash.toLowerCase(), GsonUtils.toJson(metadata));
 	  }
 	  
 	  
@@ -109,20 +109,34 @@ public class Registry extends ChainUrl {
 	    return listStreamKeyItems(this, streamName, hash.toLowerCase(), true, null, null);
 	  }
 	  
-	  public RpcResult list() throws IOException, URISyntaxException {
-		return liststreampublisheritems(this, streamName, publicKey, true, null, null);
+	  public RpcResult list(String address) throws IOException, URISyntaxException {
+		return liststreampublisheritems(this, streamName, address, true, null, null);
 	  }
 
 	  public String getStreamName() {
 	    return streamName;
 	  }
 
-	  public String getPublicKey() {
+	  /**
+	 * @param streamName the streamName to set
+	 */
+	public void setStreamName(String streamName) {
+		this.streamName = streamName;
+	}
+
+	public String getPublicKey() {
 	    return publicKey;
 	  }
 
 	  public void setPublicKey(String publicKey) {
 	    this.publicKey = publicKey;
 	  }
+
+	/**
+	 * @param init the init to set
+	 */
+	public void setInit(boolean init) {
+		this.init = init;
+	}
 
 	}

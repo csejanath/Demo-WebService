@@ -25,9 +25,13 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.halialab.demo.domain.User;
+import com.halialab.demo.domain.UserRepository;
 import com.halialab.demo.model.FileMetadata;
 import com.halialab.demo.model.RpcResult;
+import com.halialab.demo.registry.Asset;
 import com.halialab.demo.registry.Registry;
+import com.halialab.demo.service.ChainService;
 import com.halialab.demo.util.GsonUtils;
 import com.halialab.demo.util.HexUtils;
 import com.halialab.demo.util.exception.HttpException;
@@ -41,22 +45,36 @@ import com.halialab.demo.util.exception.HttpException;
 @CrossOrigin
 public class FileController {
 	
-	  @Autowired
-	  private Registry registry;
-	
-	  private static final Logger LOGGER = LoggerFactory.getLogger(FileController.class);
+//	@Autowired
+//	private Registry registry;
+
+	@Autowired
+	private ChainService chainService;
+
+	@Autowired
+	private UserRepository repository;
+
+	private static final Logger LOGGER = LoggerFactory.getLogger(FileController.class);
 	  
 	  @RequestMapping(path="/{hash}", method={RequestMethod.POST, RequestMethod.PUT})
 	  public String registerFile(@PathVariable String hash, @RequestBody FileMetadata fileMetadata) throws IOException, URISyntaxException {
 		  
 			Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 			if (!(auth instanceof AnonymousAuthenticationToken)) {
-				LOGGER.info("############### registerFile - Athenticated #####################" + auth.getName());
-		        // userDetails = auth.getPrincipal()
+				LOGGER.info("############### registerFile - Athenticated ##################### " + auth.getName());
 			}
 			
-	    // TODO validate
-	    return toJson(registry.registerFile(hash, fileMetadata));
+			User curruser = repository.findByUsername(auth.getName());
+			
+			
+			
+//			if ("TC".equals(fileMetadata.getType())) {
+//				return toJson(registry.registerFile(hash, fileMetadata, curruser.getAddress()));
+//			} else if ("ETR".equals(fileMetadata.getType())) {
+//				return toJson(asset.registerFile(hash, fileMetadata, curruser.getAddress()));
+//			}
+			
+			return toJson(chainService.registerFile(hash, fileMetadata, curruser.getAddress()));
 	  }
 	  
 	  @RequestMapping(path="/{hash}/{size}", method={RequestMethod.GET})
@@ -64,30 +82,31 @@ public class FileController {
 		  
 			Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 			if (!(auth instanceof AnonymousAuthenticationToken)) {
-				LOGGER.info("############### verify - Athenticated #####################" + auth.getName());
+				LOGGER.info("############### verify - Athenticated ##################### " + auth.getName());
 		        // userDetails = auth.getPrincipal()
 			}
 			
-	    RpcResult result = registry.query(hash);
-	    List<Map<String, Object>> resultList = result.getResultAsList();
-	    List<Map<String, Object>> output = new ArrayList<>();
-	    resultList.forEach(map -> {
-	      if (map.containsKey("data")) {
-	        try {
-	          String data = HexUtils.decode((String) map.get("data"));
-	          Map<String, Object> dataMap = GsonUtils.fromJsonToMap(data);
-	          if (dataMap.containsKey("size") && ((Number)dataMap.get("size")).longValue() == size) {
-	            output.add(dataMap);
-	          }
-	        } catch (UnsupportedEncodingException | DecoderException e) {
-	          LOGGER.error(e.getMessage(), e);
-	        }
-	      }
-	    });
-	    if (output.isEmpty()) {
-	      throw new HttpException("Not Found", HttpStatus.NOT_FOUND.value());
-	    }
-	    return GsonUtils.toJson(output);
+//	    RpcResult result = registry.query(hash);
+//	    List<Map<String, Object>> resultList = result.getResultAsList();
+//	    List<Map<String, Object>> output = new ArrayList<>();
+//	    resultList.forEach(map -> {
+//	      if (map.containsKey("data")) {
+//	        try {
+//	          String data = HexUtils.decode((String) map.get("data"));
+//	          Map<String, Object> dataMap = GsonUtils.fromJsonToMap(data);
+//	          if (dataMap.containsKey("size") && ((Number)dataMap.get("size")).longValue() == size) {
+//	            output.add(dataMap);
+//	          }
+//	        } catch (UnsupportedEncodingException | DecoderException e) {
+//	          LOGGER.error(e.getMessage(), e);
+//	        }
+//	      }
+//	    });
+//	    if (output.isEmpty()) {
+//	      throw new HttpException("Not Found", HttpStatus.NOT_FOUND.value());
+//	    }
+//	    return GsonUtils.toJson(output);
+			return null;
 	  }
 	  
 	  @RequestMapping(path="/list", method={RequestMethod.GET})
@@ -95,11 +114,11 @@ public class FileController {
 		  
 		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 		if (!(auth instanceof AnonymousAuthenticationToken)) {
-			LOGGER.info("############### list - Athenticated #####################" + auth.getName());
-	        // userDetails = auth.getPrincipal()
+			LOGGER.info("############### list - Athenticated ##################### " + auth.getName());
 		}
 		  
-	    RpcResult result = registry.list();
+		User curruser = repository.findByUsername(auth.getName());
+	    RpcResult result = chainService.list(curruser.getAddress());
 	    List<Map<String, Object>> resultList = result.getResultAsList();
 	    List<Map<String, Object>> output = new ArrayList<>();
 	    resultList.forEach(map -> {
@@ -115,9 +134,11 @@ public class FileController {
 	        }
 	      }
 	    });
-	    if (resultList.isEmpty()) {
-	      throw new HttpException("Not Found", HttpStatus.NOT_FOUND.value());
-	    }
+
+	    
+//	    if (resultList.isEmpty()) {
+//	      throw new HttpException("Not Found", HttpStatus.NOT_FOUND.value());
+//	    }
 	    return GsonUtils.toJson(output);
 	  }
 
