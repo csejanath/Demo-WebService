@@ -3,6 +3,8 @@
  */
 package com.halialab.demo.ws.pojo;
 
+import java.util.List;
+
 import org.springframework.boot.context.properties.ConfigurationProperties;
 
 /**
@@ -21,7 +23,7 @@ public class ChainRpcProperties {
   private String username;
   private String password;
   private String streamName;
-  private String publicKey;
+  private List<String> publicKey;
   private ServerMode mode;
   
   public String getProtocol() {
@@ -66,10 +68,10 @@ public class ChainRpcProperties {
   public void setStreamName(String streamName) {
     this.streamName = streamName;
   }
-  public String getPublicKey() {
+  public List<String> getPublicKey() {
     return publicKey;
   }
-  public void setPublicKey(String publicKey) {
+  public void setPublicKey(List<String> publicKey) {
     this.publicKey = publicKey;
   }
   public ServerMode getMode() {

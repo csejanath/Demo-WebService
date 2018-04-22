@@ -52,9 +52,9 @@ public class Main extends SpringBootServletInitializer {
 			registry.setProtocol(chainRpcProperties.getProtocol());
 		}
 
-		if (chainRpcProperties.getPublicKey() != null) {
-			registry.setPublicKey(chainRpcProperties.getPublicKey());
-		}
+//		if (chainRpcProperties.getPublicKey() != null) {
+//			registry.setPublicKey(chainRpcProperties.getPublicKey());
+//		}
 		ChainService chainService = new ChainService(registry);
 		try {
 			chainService.initStream();
@@ -69,12 +69,17 @@ public class Main extends SpringBootServletInitializer {
 	}
 	  
 	@Bean
-	public CommandLineRunner studentDemo(UserRepository urepository) {
+	public CommandLineRunner studentDemo(UserRepository urepository, ChainRpcProperties chainRpcProperties) {
 		return (args) -> {
 			User user1 = new User("user", "$2a$06$3jYRJrg0ghaaypjZ/.g4SethoeA51ph3UD4kZi9oPkeMTpjKU5uo6", "USER",
-					"16SwYKazYw2sonfFmFSEQCfyoc6b6Gsjeo5VGY");
+					chainRpcProperties.getPublicKey().get(0));
 			User user2 = new User("admin", "$2a$10$0MMwY.IQqpsVc1jC8u7IJ.2rT8b0Cd3b3sfIBGV2zfgnPGtT4r0.C", "ADMIN",
-					"1TKNkCAnzfb1AmQDQ9KTKmUAWnRNLH26h7ZERs");
+					chainRpcProperties.getPublicKey().get(1));
+			
+//			User user1 = new User("user", "$2a$06$3jYRJrg0ghaaypjZ/.g4SethoeA51ph3UD4kZi9oPkeMTpjKU5uo6", "USER",
+//					"16SwYKazYw2sonfFmFSEQCfyoc6b6Gsjeo5VGY");
+//			User user2 = new User("admin", "$2a$10$0MMwY.IQqpsVc1jC8u7IJ.2rT8b0Cd3b3sfIBGV2zfgnPGtT4r0.C", "ADMIN",
+//					"1TKNkCAnzfb1AmQDQ9KTKmUAWnRNLH26h7ZERs");
 
 			// For AWS
 //			User user1 = new User("user", "$2a$06$3jYRJrg0ghaaypjZ/.g4SethoeA51ph3UD4kZi9oPkeMTpjKU5uo6", "USER",

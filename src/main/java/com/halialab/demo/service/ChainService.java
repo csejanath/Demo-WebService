@@ -135,9 +135,9 @@ public class ChainService {
 		AppUtils.processList(registry.list(address), output);
 		LOGGER.info("TC count: " + output.size());
 		
-		registry.setStreamName(Streams.ETR_REG.toString());
-		AppUtils.processList(registry.list(address), output);
-		LOGGER.info("TC+ETR count: " + output.size());
+//		registry.setStreamName(Streams.ETR_REG.toString());
+//		AppUtils.processList(registry.list(address), output);
+//		LOGGER.info("TC+ETR count: " + output.size());
 
 		return output;
 	}
