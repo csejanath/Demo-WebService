@@ -7,6 +7,7 @@ import static com.halialab.demo.util.StreamUtils.create;
 import static com.halialab.demo.util.StreamUtils.listStreamKeyItems;
 import static com.halialab.demo.util.StreamUtils.publish;
 import static com.halialab.demo.util.StreamUtils.liststreampublisheritems;
+import static com.halialab.demo.util.AssetUtils.issue;
 
 import java.io.IOException;
 import java.net.URISyntaxException;
@@ -99,6 +100,11 @@ public class Registry extends ChainUrl {
 	    return publish(this, address, streamName, hash.toLowerCase(), GsonUtils.toJson(metadata));
 	  }
 	  
+	  public RpcResult registerFile(String hash, String metadata, String address) throws IOException, URISyntaxException {
+		    initStream();
+		    return publish(this, address, streamName, hash.toLowerCase(), metadata);
+	  }
+	  
 	  
 	  public boolean hashExists(String hash) throws IOException, URISyntaxException {
 	    RpcResult result = query(hash.toLowerCase());
@@ -111,6 +117,10 @@ public class Registry extends ChainUrl {
 	  
 	  public RpcResult list(String address) throws IOException, URISyntaxException {
 		return liststreampublisheritems(this, streamName, address, true, null, null);
+	  }
+	  
+	  public RpcResult registerAsset(String address, String assetID, Integer qty) throws IOException, URISyntaxException {
+		    return issue(this, address, assetID, qty, true, null, null);
 	  }
 
 	  public String getStreamName() {

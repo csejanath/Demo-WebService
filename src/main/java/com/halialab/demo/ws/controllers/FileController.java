@@ -45,9 +45,6 @@ import com.halialab.demo.util.exception.HttpException;
 @CrossOrigin
 public class FileController {
 	
-//	@Autowired
-//	private Registry registry;
-
 	@Autowired
 	private ChainService chainService;
 
@@ -55,27 +52,20 @@ public class FileController {
 	private UserRepository repository;
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(FileController.class);
-	  
-	  @RequestMapping(path="/{hash}", method={RequestMethod.POST, RequestMethod.PUT})
-	  public String registerFile(@PathVariable String hash, @RequestBody FileMetadata fileMetadata) throws IOException, URISyntaxException {
-		  
-			Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-			if (!(auth instanceof AnonymousAuthenticationToken)) {
-				LOGGER.info("############### registerFile - Athenticated ##################### " + auth.getName());
-			}
-			
-			User curruser = repository.findByUsername(auth.getName());
-			
-			
-			
-//			if ("TC".equals(fileMetadata.getType())) {
-//				return toJson(registry.registerFile(hash, fileMetadata, curruser.getAddress()));
-//			} else if ("ETR".equals(fileMetadata.getType())) {
-//				return toJson(asset.registerFile(hash, fileMetadata, curruser.getAddress()));
-//			}
-			
-			return toJson(chainService.registerFile(hash, fileMetadata, curruser.getAddress()));
-	  }
+
+	@RequestMapping(path = "/{hash}", method = { RequestMethod.POST, RequestMethod.PUT })
+	public String registerFile(@PathVariable String hash, @RequestBody FileMetadata fileMetadata)
+			throws IOException, URISyntaxException {
+
+		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+		if (!(auth instanceof AnonymousAuthenticationToken)) {
+			LOGGER.info("############### registerFile - Athenticated ##################### " + auth.getName());
+		}
+
+		User curruser = repository.findByUsername(auth.getName());
+
+		return toJson(chainService.registerFile(hash, fileMetadata, curruser.getAddress()));
+	}
 	  
 	  @RequestMapping(path="/{hash}/{size}", method={RequestMethod.GET})
 	  public String verify(@PathVariable String hash, @PathVariable long size) throws IOException, URISyntaxException {
@@ -109,37 +99,17 @@ public class FileController {
 			return null;
 	  }
 	  
-	  @RequestMapping(path="/list", method={RequestMethod.GET})
-	  public String list() throws IOException, URISyntaxException {
-		  
+	@RequestMapping(path = "/list", method = { RequestMethod.GET })
+	public String list() throws IOException, URISyntaxException {
+
 		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 		if (!(auth instanceof AnonymousAuthenticationToken)) {
 			LOGGER.info("############### list - Athenticated ##################### " + auth.getName());
 		}
-		  
-		User curruser = repository.findByUsername(auth.getName());
-	    RpcResult result = chainService.list(curruser.getAddress());
-	    List<Map<String, Object>> resultList = result.getResultAsList();
-	    List<Map<String, Object>> output = new ArrayList<>();
-	    resultList.forEach(map -> {
-	      if (map.containsKey("data")) {
-	        try {
-	          String data = HexUtils.decode((String) map.get("data"));
-	          Map<String, Object> dataMap = GsonUtils.fromJsonToMap(data);
-//	          if (dataMap.containsKey("size") && ((Number)dataMap.get("size")).longValue() == size) {
-	            output.add(dataMap);
-//	          }
-	        } catch (UnsupportedEncodingException | DecoderException e) {
-	          LOGGER.error(e.getMessage(), e);
-	        }
-	      }
-	    });
 
-	    
-//	    if (resultList.isEmpty()) {
-//	      throw new HttpException("Not Found", HttpStatus.NOT_FOUND.value());
-//	    }
-	    return GsonUtils.toJson(output);
-	  }
+		User curruser = repository.findByUsername(auth.getName());
+
+		return GsonUtils.toJson(chainService.list(curruser.getAddress()));
+	}
 
 }
