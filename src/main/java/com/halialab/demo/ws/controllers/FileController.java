@@ -111,5 +111,19 @@ public class FileController {
 
 		return GsonUtils.toJson(chainService.list(curruser.getAddress()));
 	}
+	
+	@RequestMapping(path = "/transfer/{hash}", method = { RequestMethod.POST })
+	public String transfer(@PathVariable String hash, @RequestBody FileMetadata fileMetadata) throws IOException, URISyntaxException {
+
+		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+		if (!(auth instanceof AnonymousAuthenticationToken)) {
+			LOGGER.info("############### list - Athenticated ##################### " + auth.getName());
+		}
+
+		User curruser = repository.findByUsername(auth.getName());
+		User otheruser = repository.findByUsername(fileMetadata.getOtherUsername());
+
+		return GsonUtils.toJson(chainService.SendAsset(hash, curruser.getAddress(), otheruser.getAddress(), Integer.parseInt(fileMetadata.getQuantity())));
+	}
 
 }

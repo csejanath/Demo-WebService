@@ -26,6 +26,7 @@ public class FileMetadata implements Serializable {
 	  private String doc_type;
 	  private String type;
 	  private String quantity;
+	  private String otherUsername;
 	  
 	  private String otherData;
 	  
@@ -154,6 +155,18 @@ public class FileMetadata implements Serializable {
 	 */
 	public static long getSerialversionuid() {
 		return serialVersionUID;
+	}
+	/**
+	 * @return the otherUsername
+	 */
+	public String getOtherUsername() {
+		return otherUsername;
+	}
+	/**
+	 * @param otherUsername the otherUsername to set
+	 */
+	public void setOtherUsername(String otherUsername) {
+		this.otherUsername = otherUsername;
 	}
 
 	}

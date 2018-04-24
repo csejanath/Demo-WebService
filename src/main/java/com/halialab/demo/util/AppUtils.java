@@ -30,10 +30,33 @@ public class AppUtils {
 			if (map.containsKey("data")) {
 				try {
 					String data = HexUtils.decode((String) map.get("data"));
+					LOGGER.info("processList: " + data);
 					Map<String, Object> dataMap = GsonUtils.fromJsonToMap(data);
 					// if (dataMap.containsKey("size") &&
 					// ((Number)dataMap.get("size")).longValue() == size) {
 					output.add(dataMap);
+					// }
+				} catch (UnsupportedEncodingException | DecoderException e) {
+					LOGGER.error(e.getMessage(), e);
+				}
+			}
+		});
+		return output;
+	}
+	
+	public static List<String> processETRList(RpcResult result, List<String> output) {
+		
+		List<Map<String, Object>> resultresultList = result.getResultAsList();
+
+		resultresultList.forEach(map -> {
+			if (map.containsKey("data")) {
+				try {
+					String data = HexUtils.decode((String) map.get("data"));
+					LOGGER.info("processETRList: " + data);
+//					Map<String, Object> dataMap = GsonUtils.fromJsonToMap(data);
+					// if (dataMap.containsKey("size") &&
+					// ((Number)dataMap.get("size")).longValue() == size) {
+					output.add(data);
 					// }
 				} catch (UnsupportedEncodingException | DecoderException e) {
 					LOGGER.error(e.getMessage(), e);
