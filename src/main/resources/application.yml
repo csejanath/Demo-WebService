@@ -1,9 +1,17 @@
 spring:
   profiles:
-    active: "dev"
+    active: "aws"
 ---
 spring:
   profiles: dev
+  datasource:
+    url: jdbc:h2:~/demo1;DB_CLOSE_ON_EXIT=FALSE
+    username: test
+    password: test
+    driverClassName: org.h2.Driver
+  jpa:
+    hibernate:
+      ddl-auto: update
 chainrpc:
   host: localhost
   port: 2910
@@ -21,6 +29,14 @@ server:
 ---
 spring:
   profiles: aws
+  datasource:
+    url: jdbc:h2:~/demo;DB_CLOSE_ON_EXIT=FALSE
+    username: test
+    password: test
+    driverClassName: org.h2.Driver
+  jpa:
+    hibernate:
+      ddl-auto: update
 chainrpc:
   host: localhost
   port: 4358
