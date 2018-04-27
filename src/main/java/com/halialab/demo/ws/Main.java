@@ -71,24 +71,30 @@ public class Main extends SpringBootServletInitializer {
 	@Bean
 	public CommandLineRunner studentDemo(UserRepository urepository, ChainRpcProperties chainRpcProperties) {
 		return (args) -> {
-			User user1 = new User("user", "$2a$06$3jYRJrg0ghaaypjZ/.g4SethoeA51ph3UD4kZi9oPkeMTpjKU5uo6", "USER",
-					chainRpcProperties.getPublicKey().get(0));
-			User user2 = new User("admin", "$2a$10$0MMwY.IQqpsVc1jC8u7IJ.2rT8b0Cd3b3sfIBGV2zfgnPGtT4r0.C", "ADMIN",
-					chainRpcProperties.getPublicKey().get(1));
-			
+			try {
+				User user1 = new User("user", "$2a$06$3jYRJrg0ghaaypjZ/.g4SethoeA51ph3UD4kZi9oPkeMTpjKU5uo6", "USER",
+						chainRpcProperties.getPublicKey().get(0));
+				User user2 = new User("admin", "$2a$10$0MMwY.IQqpsVc1jC8u7IJ.2rT8b0Cd3b3sfIBGV2zfgnPGtT4r0.C", "ADMIN",
+						chainRpcProperties.getPublicKey().get(1));
+				
 //			User user1 = new User("user", "$2a$06$3jYRJrg0ghaaypjZ/.g4SethoeA51ph3UD4kZi9oPkeMTpjKU5uo6", "USER",
 //					"16SwYKazYw2sonfFmFSEQCfyoc6b6Gsjeo5VGY");
 //			User user2 = new User("admin", "$2a$10$0MMwY.IQqpsVc1jC8u7IJ.2rT8b0Cd3b3sfIBGV2zfgnPGtT4r0.C", "ADMIN",
 //					"1TKNkCAnzfb1AmQDQ9KTKmUAWnRNLH26h7ZERs");
 
-			// For AWS
+				// For AWS
 //			User user1 = new User("user", "$2a$06$3jYRJrg0ghaaypjZ/.g4SethoeA51ph3UD4kZi9oPkeMTpjKU5uo6", "USER",
 //					"1ThRZzL3i4Zc96japNbDWA3sxGUxnWCKgfq1so");
 //			User user2 = new User("admin", "$2a$10$0MMwY.IQqpsVc1jC8u7IJ.2rT8b0Cd3b3sfIBGV2zfgnPGtT4r0.C", "ADMIN",
 //					"1PysmGFApqSXvnKTuiQ2F3bYcKp1ziTPnZzLRs");
-			
-			urepository.save(user1);
-			urepository.save(user2);
+				
+				urepository.save(user1);
+				urepository.save(user2);
+			} catch (Exception e) {
+				LOGGER.error(e.getMessage());
+				// TODO Auto-generated catch block
+//				e.printStackTrace();
+			}
 
 		};
 	}
