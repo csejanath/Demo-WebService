@@ -8,6 +8,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.Table;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
@@ -16,16 +17,13 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
  *
  */
 @Entity
-public class ETRDetail {
+@Table(name="TC_DETAIL")
+public class TCDetail {
 	
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id", nullable = false, updatable = false)
-    private Long id;
-
-    // Username with unique constraint
-    @Column(name = "assetID", nullable = false, unique = true)
-    private String assetID;
+    @Column(name = "cid", nullable = false, updatable = false)
+    private Long cid;
 
     @JsonIgnore
     @Column(name = "fileName", nullable = false)
@@ -45,69 +43,44 @@ public class ETRDetail {
     @JsonIgnore
     @Column(name = "doc_type")
     private String doc_type;
-    
-    @JsonIgnore
-    @Column(name = "quantity", nullable = false)
-    private String quantity;
 
 	/**
-	 * 
+	 * @return the cid
 	 */
-	public ETRDetail() {
-		// TODO Auto-generated constructor stub
+	public Long getCid() {
+		return cid;
 	}
 
 	/**
-	 * @return the id
+	 * @param cid the cid to set
 	 */
-	public Long getId() {
-		return id;
+	public void setCid(Long cid) {
+		this.cid = cid;
 	}
 
 	/**
-	 * @param id the id to set
+	 * @return the fileName
 	 */
-	public void setId(Long id) {
-		this.id = id;
-	}
-
-	/**
-	 * @return the assetID
-	 */
-	public String getAssetID() {
-		return assetID;
-	}
-
-	/**
-	 * @param assetID the assetID to set
-	 */
-	public void setAssetID(String assetID) {
-		this.assetID = assetID;
-	}
-
-	/**
-	 * @return the filename
-	 */
-	public String getFilename() {
+	public String getFileName() {
 		return fileName;
 	}
 
 	/**
-	 * @param filename the filename to set
+	 * @param fileName the fileName to set
 	 */
-	public void setFilename(String filename) {
-		this.fileName = filename;
+	public void setFileName(String fileName) {
+		this.fileName = fileName;
 	}
 
 	/**
-	 * @return the filesize
+	 * @return the fileSize
 	 */
 	public String getFileSize() {
 		return fileSize;
 	}
 
 	/**
-	 * @param filesize the filesize to set
+	 * @param fileSize the fileSize to set
 	 */
 	public void setFileSize(String fileSize) {
 		this.fileSize = fileSize;
@@ -155,18 +128,4 @@ public class ETRDetail {
 		this.doc_type = doc_type;
 	}
 
-	/**
-	 * @return the quantity
-	 */
-	public String getQuantity() {
-		return quantity;
-	}
-
-	/**
-	 * @param quantity the quantity to set
-	 */
-	public void setQuantity(String quantity) {
-		this.quantity = quantity;
-	}
-    
 }

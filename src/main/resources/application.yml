@@ -1,6 +1,6 @@
 spring:
   profiles:
-    active: "aws"
+    active: "dev"
 ---
 spring:
   profiles: dev
@@ -24,6 +24,7 @@ chainrpc:
   multichainUtil: /home/jboss/extracts-poc/multichain-1.0-beta-1/multichain-util
   publicKey[0] : 16SwYKazYw2sonfFmFSEQCfyoc6b6Gsjeo5VGY
   publicKey[1] : 1TKNkCAnzfb1AmQDQ9KTKmUAWnRNLH26h7ZERs
+  burnAddress : 1XXXXXXXLXXXXXXXNhXXXXXXfjXXXXXXYHa8tT
 server: 
   port: 8090
 ---
@@ -49,5 +50,6 @@ chainrpc:
   multichainUtil: /home/jboss/extracts-poc/multichain-1.0-beta-1/multichain-util
   publicKey[0] : 1ThRZzL3i4Zc96japNbDWA3sxGUxnWCKgfq1so
   publicKey[1] : 1PysmGFApqSXvnKTuiQ2F3bYcKp1ziTPnZzLRs
+  burnAddress : 1XXXXXXWWXXXXXXXFJXXXXXXTKXXXXXXTn2K8q
 server:
   port: 8090

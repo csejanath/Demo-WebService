@@ -25,6 +25,7 @@ public class ChainRpcProperties {
   private String streamName;
   private List<String> publicKey;
   private ServerMode mode;
+  private String burnAddress;
   
   public String getProtocol() {
     return protocol;
@@ -80,4 +81,17 @@ public class ChainRpcProperties {
   public void setMode(ServerMode mode) {
     this.mode = mode;
   }
+/**
+ * @return the burnAddress
+ */
+public String getBurnAddress() {
+	return burnAddress;
+}
+/**
+ * @param burnAddress the burnAddress to set
+ */
+public void setBurnAddress(String burnAddress) {
+	this.burnAddress = burnAddress;
+}
+  
 }

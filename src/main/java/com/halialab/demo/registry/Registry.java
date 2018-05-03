@@ -39,6 +39,7 @@ public class Registry extends ChainUrl {
 	  private boolean init = false;
 	  private String streamName;
 	  private String publicKey;
+	  private String burnAddress;
 	  
 	  public Registry(String host, int port, String chainName, String username, String password) {
 	    this(host, port, chainName, username, password, null);
@@ -162,6 +163,20 @@ public class Registry extends ChainUrl {
 	 */
 	public void setInit(boolean init) {
 		this.init = init;
+	}
+
+	/**
+	 * @return the burnAddress
+	 */
+	public String getBurnAddress() {
+		return burnAddress;
+	}
+
+	/**
+	 * @param burnAddress the burnAddress to set
+	 */
+	public void setBurnAddress(String burnAddress) {
+		this.burnAddress = burnAddress;
 	}
 
 	}

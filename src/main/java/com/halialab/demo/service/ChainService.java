@@ -4,6 +4,7 @@
 package com.halialab.demo.service;
 
 import static com.halialab.demo.util.GsonUtils.toJson;
+import static com.halialab.demo.util.StreamUtils.listStreamKeyItems;
 import static com.halialab.demo.util.StreamUtils.liststreampublisheritems;
 import static com.halialab.demo.util.StreamUtils.publish;
 
@@ -23,15 +24,17 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 
+import com.halialab.demo.Main;
 import com.halialab.demo.domain.ETRDetail;
 import com.halialab.demo.domain.ETRRepository;
+import com.halialab.demo.domain.TCDetail;
+import com.halialab.demo.domain.TCRepository;
 import com.halialab.demo.model.FileMetadata;
 import com.halialab.demo.model.RpcResult;
 import com.halialab.demo.registry.Registry;
 import com.halialab.demo.util.AppUtils;
 import com.halialab.demo.util.GsonUtils;
 import com.halialab.demo.util.HexUtils;
-import com.halialab.demo.ws.Main;
 import com.halialab.demo.ws.pojo.ChainRpcProperties;
 
 /**
@@ -43,7 +46,7 @@ public class ChainService {
 	private static final Logger LOGGER = LoggerFactory.getLogger(ChainService.class);
 	
 	public enum Streams {
-		TC_REG,
+		TC_REG1,
 		ETR_REG1
 	}
 	
@@ -51,6 +54,9 @@ public class ChainService {
 	
 	@Autowired
 	ETRRepository eTRRepository;
+	
+	@Autowired
+	TCRepository tcRepository;
 	
 	public ChainService (Registry registry) {
 		this.registry = registry;
@@ -116,8 +122,20 @@ public class ChainService {
 	public RpcResult registerFile(String hash, FileMetadata metadata, String address) throws IOException, URISyntaxException {
 		
 		if ("TC".equals(metadata.getType())) {
-			registry.setStreamName(Streams.TC_REG.toString());
-			return (registry.registerFile(hash, metadata, address));
+			
+	        TCDetail tcDetail = new TCDetail();
+	        tcDetail.setFileName(metadata.getFileName());
+	        tcDetail.setFileSize(metadata.getFileSize());
+	        tcDetail.setNickname(metadata.getNickname());
+	        tcDetail.setRemarks(metadata.getRemarks());
+	        tcDetail.setDoc_type(metadata.getDoc_type());
+	        tcRepository.save(tcDetail);
+	        
+	        Long id = tcDetail.getCid();
+	        LOGGER.info("registerFile TC id: " + id);
+			
+			registry.setStreamName(Streams.TC_REG1.toString());
+			return (registry.registerFile(hash, id, address));
 		} else if ("ETR".equals(metadata.getType())) {
 			
 	        // Creating a random UUID (Universally unique identifier).
@@ -131,6 +149,10 @@ public class ChainService {
 	        ETRDetail eTRDetail = new ETRDetail();
 	        eTRDetail.setAssetID(assetID);
 	        eTRDetail.setFilename(metadata.getFileName());
+	        eTRDetail.setFileSize(metadata.getFileSize());
+	        eTRDetail.setNickname(metadata.getNickname());
+	        eTRDetail.setRemarks(metadata.getRemarks());
+	        eTRDetail.setDoc_type(metadata.getDoc_type());
 	        eTRDetail.setQuantity(metadata.getQuantity());
 	        eTRRepository.save(eTRDetail);
 	        
@@ -144,33 +166,16 @@ public class ChainService {
 		
 		List<Map<String, Object>> output = new ArrayList<>();
 		
-		registry.setStreamName(Streams.TC_REG.toString());
-		AppUtils.processList(registry.list(address), output);
+		registry.setStreamName(Streams.TC_REG1.toString());
+		AppUtils.processList(tcRepository, registry.list(address), output);
 		LOGGER.info("TC count: " + output.size());
 		
-		List<String> output1 = new ArrayList<>();
+//		List<String> output1 = new ArrayList<>();
+//		List<Map<String, Object>> output1 = new ArrayList<>();
 		
 		registry.setStreamName(Streams.ETR_REG1.toString());
-		AppUtils.processETRList(registry.list(address), output1);
-		LOGGER.info("ETR count: " + output1.size());
-		
-		output1.forEach( assetID -> {
-			try {
-				LOGGER.info("Get Balance count: " + toJson(registry.getAssetBalance(address, assetID)));
-				
-				String data = toJson(eTRRepository.findByAssetID(assetID));
-				LOGGER.info("Get ETR Details: " + data);
-				
-				if (data != null && !"null".equals(data)) {
-					Map<String, Object> dataMap = GsonUtils.fromJsonToMap(data);
-					output.add(dataMap);
-				}
-
-			} catch (IOException | URISyntaxException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-		});
+		AppUtils.processETRList(registry, address, eTRRepository, registry.list(address), output);
+		LOGGER.info("TC + ETR count: " + output.size());
 
 		return output;
 	}
@@ -182,9 +187,35 @@ public class ChainService {
 		registry.setStreamName(Streams.ETR_REG1.toString());
 		AppUtils.processETRList(registry.query(hash), output);
 		
-		return registry.SendAsset(addressFrom, addressTo, output.get(0), qty);
+		// for cancel
+		if ("CANCEL".equals(addressTo)) {
+			addressTo = registry.getBurnAddress();
+			return registry.SendAsset(addressFrom, addressTo, output.get(0), qty);
+		}
+		
+		String assetID = output.get(0);
+		
+		registry.SendAsset(addressFrom, addressTo, assetID, qty);
+				
+		return registry.registerFile(hash, assetID, addressTo);
 		
 	}
 	
+	public List<Map<String, Object>> query(String hash, long size) throws IOException, URISyntaxException {
+		
+		List<Map<String, Object>> output = new ArrayList<>();
+		registry.setStreamName(Streams.TC_REG1.toString());
+		AppUtils.processList(tcRepository, registry.query(hash.toLowerCase()), output);
+		LOGGER.info("query - TC count: " + output.size());
+		
+		if (output.size() > 0) {
+			Map<String, Object> dataMap = output.get(0);
+			if (dataMap.containsKey("fileSize") && (Long.parseLong((String)dataMap.get("fileSize")) == size)) {
+				dataMap.put("status", "Verified");
+			}
+		}
+		
+		return output;
+	}
 	
 }

@@ -60,6 +60,7 @@ public class FileController {
 		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 		if (!(auth instanceof AnonymousAuthenticationToken)) {
 			LOGGER.info("############### registerFile - Athenticated ##################### " + auth.getName());
+			LOGGER.info("############### registerFile - fileMetadata ##################### " + toJson(fileMetadata));
 		}
 
 		User curruser = repository.findByUsername(auth.getName());
@@ -67,37 +68,38 @@ public class FileController {
 		return toJson(chainService.registerFile(hash, fileMetadata, curruser.getAddress()));
 	}
 	  
-	  @RequestMapping(path="/{hash}/{size}", method={RequestMethod.GET})
-	  public String verify(@PathVariable String hash, @PathVariable long size) throws IOException, URISyntaxException {
-		  
-			Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-			if (!(auth instanceof AnonymousAuthenticationToken)) {
-				LOGGER.info("############### verify - Athenticated ##################### " + auth.getName());
-		        // userDetails = auth.getPrincipal()
-			}
-			
-//	    RpcResult result = registry.query(hash);
-//	    List<Map<String, Object>> resultList = result.getResultAsList();
-//	    List<Map<String, Object>> output = new ArrayList<>();
-//	    resultList.forEach(map -> {
-//	      if (map.containsKey("data")) {
-//	        try {
-//	          String data = HexUtils.decode((String) map.get("data"));
-//	          Map<String, Object> dataMap = GsonUtils.fromJsonToMap(data);
-//	          if (dataMap.containsKey("size") && ((Number)dataMap.get("size")).longValue() == size) {
-//	            output.add(dataMap);
-//	          }
-//	        } catch (UnsupportedEncodingException | DecoderException e) {
-//	          LOGGER.error(e.getMessage(), e);
-//	        }
-//	      }
-//	    });
-//	    if (output.isEmpty()) {
-//	      throw new HttpException("Not Found", HttpStatus.NOT_FOUND.value());
-//	    }
-//	    return GsonUtils.toJson(output);
-			return null;
-	  }
+	@RequestMapping(path="/{hash}/{size}", method={RequestMethod.GET})
+	public String verify(@PathVariable String hash, @PathVariable long size) throws IOException, URISyntaxException {
+
+		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+		if (!(auth instanceof AnonymousAuthenticationToken)) {
+			LOGGER.info("############### verify - Athenticated ##################### " + auth.getName());
+			// userDetails = auth.getPrincipal()
+		}
+
+//		RpcResult result = chainService.query(hash, size);
+//		
+//		List<Map<String, Object>> resultList = result.getResultAsList();
+//		List<Map<String, Object>> output = new ArrayList<>();
+//		resultList.forEach(map -> {
+//			if (map.containsKey("data")) {
+//				try {
+//					String data = HexUtils.decode((String) map.get("data"));
+//					Map<String, Object> dataMap = GsonUtils.fromJsonToMap(data);
+//					if (dataMap.containsKey("size") && ((Number) dataMap.get("size")).longValue() == size) {
+//						output.add(dataMap);
+//					}
+//				} catch (UnsupportedEncodingException | DecoderException e) {
+//					LOGGER.error(e.getMessage(), e);
+//				}
+//			}
+//		});
+//		if (output.isEmpty()) {
+//			throw new HttpException("Not Found", HttpStatus.NOT_FOUND.value());
+//		}
+		
+		return GsonUtils.toJson(chainService.query(hash, size));
+	}
 	  
 	@RequestMapping(path = "/list", method = { RequestMethod.GET })
 	public String list() throws IOException, URISyntaxException {
@@ -124,6 +126,19 @@ public class FileController {
 		User otheruser = repository.findByUsername(fileMetadata.getOtherUsername());
 
 		return GsonUtils.toJson(chainService.SendAsset(hash, curruser.getAddress(), otheruser.getAddress(), Integer.parseInt(fileMetadata.getQuantity())));
+	}
+	
+	@RequestMapping(path = "/cancel/{hash}", method = { RequestMethod.POST })
+	public String cancel(@PathVariable String hash, @RequestBody FileMetadata fileMetadata) throws IOException, URISyntaxException {
+
+		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+		if (!(auth instanceof AnonymousAuthenticationToken)) {
+			LOGGER.info("############### list - Athenticated ##################### " + auth.getName());
+		}
+
+		User curruser = repository.findByUsername(auth.getName());
+
+		return GsonUtils.toJson(chainService.SendAsset(hash, curruser.getAddress(),"CANCEL", Integer.parseInt(fileMetadata.getQuantity())));
 	}
 
 }

@@ -5,6 +5,7 @@ package com.halialab.demo.ws.config;
 
 import java.util.Arrays;
 
+import org.aspectj.weaver.ast.And;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.domain.EntityScan;
 import org.springframework.context.annotation.Bean;
@@ -50,8 +51,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 		http.authorizeRequests()
 			.antMatchers("/registry/**").authenticated()
 			.anyRequest().permitAll()
-			.and().formLogin().loginPage("/login").successForwardUrl("/login/success").permitAll()
-			.and().logout().logoutSuccessUrl("/login").deleteCookies("JSESSIONID");
+			.and().formLogin().loginPage("/login").successForwardUrl("/login/success").permitAll();
+//			.and().authenticationEntryPoint(new org.springframework.boot.autoconfigure.security.Http401AuthenticationEntryPoint("headerValue"));
+//			.and().logout().logoutSuccessUrl("/login").deleteCookies("JSESSIONID");
+
 	}
 	
     @Autowired

@@ -1,4 +1,4 @@
-package com.halialab.demo.ws;
+package com.halialab.demo;
 
 import java.io.IOException;
 import java.net.URISyntaxException;
@@ -50,6 +50,9 @@ public class Main extends SpringBootServletInitializer {
 				chainRpcProperties.getStreamName());
 		if (chainRpcProperties.getProtocol() != null) {
 			registry.setProtocol(chainRpcProperties.getProtocol());
+		}
+		if (chainRpcProperties.getBurnAddress() != null) {
+			registry.setBurnAddress(chainRpcProperties.getBurnAddress());
 		}
 
 //		if (chainRpcProperties.getPublicKey() != null) {

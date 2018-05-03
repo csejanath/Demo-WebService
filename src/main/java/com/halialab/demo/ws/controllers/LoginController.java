@@ -7,6 +7,7 @@ import static com.halialab.demo.util.GsonUtils.toJson;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -52,7 +53,7 @@ public class LoginController {
 //	}
 	
 	@RequestMapping(method = RequestMethod.GET)
-	public String logout(){
+	public ResponseEntity<?> logout(){
 		
 		LOGGER.info("############### logout #####################");
 
@@ -60,10 +61,10 @@ public class LoginController {
 		if (!(auth instanceof AnonymousAuthenticationToken)) {
 			LOGGER.info("############### logout - Athenticated #####################" + auth.getName());
 //	         userDetails = auth.getPrincipal()
-			return auth.getName();
+//			return auth.getName();
 		}
 		
-		return "redirect:/login?logout";
+		return new ResponseEntity<>("Unauthorized", HttpStatus.UNAUTHORIZED);
 
 	}
 
