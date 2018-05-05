@@ -109,10 +109,15 @@ public class AppUtils {
 					Map<String, Object>	balancemap = balance.getResultAsMap();
 					List<Map<String, Object>>	mybalance = (ArrayList)balancemap.get(address);
 					List<Map<String, Object>>	totalbalance = (ArrayList) balancemap.get("total");
-					Map<String, Object> mybalancemap = (Map<String, Object>) mybalance.get(0);
-					Map<String, Object> totalbalancemap = (Map<String, Object>) totalbalance.get(0);
-					Double	myqty = (Double)mybalancemap.get("qty");
-					Double	totalqty = (Double) totalbalancemap.get("qty");
+					
+					Double myqty = 0D;
+					Double totalqty = 0D;
+					if (mybalance != null && totalbalance != null) {
+						Map<String, Object> mybalancemap = (Map<String, Object>) mybalance.get(0);
+						Map<String, Object> totalbalancemap = (Map<String, Object>) totalbalance.get(0);
+						myqty = (Double) mybalancemap.get("qty");
+						totalqty = (Double) totalbalancemap.get("qty");
+					}
 //					
 					LOGGER.info("Get Balance count: " + toJson(balancemap));
 //					LOGGER.info("Get Balance count1: " + toJson(mybalancemap.get("myqty")));
@@ -132,7 +137,7 @@ public class AppUtils {
 					
 //					output.add(assetID);
 					// }
-				} catch (DecoderException | IOException | URISyntaxException e) {
+				} catch (Exception e) {
 					LOGGER.error(e.getMessage(), e);
 				}
 			}

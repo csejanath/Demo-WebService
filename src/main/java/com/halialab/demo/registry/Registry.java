@@ -10,6 +10,7 @@ import static com.halialab.demo.util.StreamUtils.liststreampublisheritems;
 import static com.halialab.demo.util.AssetUtils.issue;
 import static com.halialab.demo.util.AssetUtils.getBalance;
 import static com.halialab.demo.util.AssetUtils.getMultiBalance;
+import static com.halialab.demo.util.AssetUtils.transferAssetFrom;
 import static com.halialab.demo.util.AssetUtils.transferAsset;
 
 import java.io.IOException;
@@ -136,7 +137,11 @@ public class Registry extends ChainUrl {
 	  }
 	  
 	  public RpcResult SendAsset(String addressFrom, String addressTo, String assetID, Integer qty) throws IOException, URISyntaxException {
-		    return transferAsset(this, addressFrom, addressTo, assetID, qty);
+		    return transferAssetFrom(this, addressFrom, addressTo, assetID, qty);
+	  }
+	  
+	  public RpcResult cancelAsset(String addressTo, String assetID, Integer qty) throws IOException, URISyntaxException {
+		    return transferAsset(this, addressTo, assetID, qty);
 	  }
 
 	  public String getStreamName() {

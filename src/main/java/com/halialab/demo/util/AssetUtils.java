@@ -32,8 +32,12 @@ public class AssetUtils {
 		return invokeRpc(chainUrl, BasicMethods.COMMAND_GET_MULTI_BALANCE, addressFrom, assetID);
 	}
 	
-	public static RpcResult transferAsset(ChainUrl chainUrl, String addressFrom, String addressTo, String assetID, Integer qty) throws IOException, URISyntaxException {
-		return invokeRpc(chainUrl, BasicMethods.COMMAND_SEND_ASSETS, addressFrom, addressTo, assetID, qty);
+	public static RpcResult transferAssetFrom(ChainUrl chainUrl, String addressFrom, String addressTo, String assetID, Integer qty) throws IOException, URISyntaxException {
+		return invokeRpc(chainUrl, BasicMethods.COMMAND_SEND_ASSETS_FROM, addressFrom, addressTo, assetID, qty);
+	}
+	
+	public static RpcResult transferAsset(ChainUrl chainUrl, String addressTo, String assetID, Integer qty) throws IOException, URISyntaxException {
+		return invokeRpc(chainUrl, BasicMethods.COMMAND_SEND_ASSETS, addressTo, assetID, qty);
 	}
 
 }

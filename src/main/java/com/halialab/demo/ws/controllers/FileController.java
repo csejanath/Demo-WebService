@@ -119,7 +119,7 @@ public class FileController {
 
 		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 		if (!(auth instanceof AnonymousAuthenticationToken)) {
-			LOGGER.info("############### list - Athenticated ##################### " + auth.getName());
+			LOGGER.info("############### transfer - Athenticated ##################### " + auth.getName());
 		}
 
 		User curruser = repository.findByUsername(auth.getName());
@@ -133,12 +133,12 @@ public class FileController {
 
 		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 		if (!(auth instanceof AnonymousAuthenticationToken)) {
-			LOGGER.info("############### list - Athenticated ##################### " + auth.getName());
+			LOGGER.info("############### cancel - Athenticated ##################### " + auth.getName());
 		}
 
 		User curruser = repository.findByUsername(auth.getName());
 
-		return GsonUtils.toJson(chainService.SendAsset(hash, curruser.getAddress(),"CANCEL", Integer.parseInt(fileMetadata.getQuantity())));
+		return GsonUtils.toJson(chainService.cancelAsset(hash, Integer.parseInt(fileMetadata.getQuantity())));
 	}
 
 }

@@ -201,6 +201,21 @@ public class ChainService {
 		
 	}
 	
+	public RpcResult cancelAsset(String hash, Integer qty) throws IOException, URISyntaxException {
+
+		List<String> output = new ArrayList<>();
+
+		registry.setStreamName(Streams.ETR_REG1.toString());
+		AppUtils.processETRList(registry.query(hash), output);
+
+		String assetID = output.get(0);
+
+		// for cancel
+		String addressTo = registry.getBurnAddress();
+		return registry.cancelAsset(addressTo, assetID, qty);
+
+	}
+	
 	public List<Map<String, Object>> query(String hash, long size) throws IOException, URISyntaxException {
 		
 		List<Map<String, Object>> output = new ArrayList<>();
