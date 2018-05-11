@@ -98,7 +98,9 @@ public class FileController {
 //			throw new HttpException("Not Found", HttpStatus.NOT_FOUND.value());
 //		}
 		
-		return GsonUtils.toJson(chainService.query(hash, size));
+		User curruser = repository.findByUsername(auth.getName());
+		
+		return GsonUtils.toJson(chainService.query(hash, size, curruser.getAddress()));
 	}
 	  
 	@RequestMapping(path = "/list", method = { RequestMethod.GET })
@@ -139,6 +141,17 @@ public class FileController {
 		User curruser = repository.findByUsername(auth.getName());
 
 		return GsonUtils.toJson(chainService.cancelAsset(hash, Integer.parseInt(fileMetadata.getQuantity())));
+	}
+	
+	@RequestMapping(path = "/assertion/{hash}", method = { RequestMethod.GET })
+	public String assertion(@PathVariable String hash) throws IOException, URISyntaxException {
+
+		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+		if (!(auth instanceof AnonymousAuthenticationToken)) {
+			LOGGER.info("############### cancel - Athenticated ##################### " + auth.getName());
+		}
+
+		return GsonUtils.toJson(chainService.assertionList(hash));
 	}
 
 }

@@ -9,6 +9,7 @@ import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -138,6 +139,34 @@ public class AppUtils {
 //					output.add(assetID);
 					// }
 				} catch (Exception e) {
+					LOGGER.error(e.getMessage(), e);
+				}
+			}
+		});
+		return output;
+	}
+	
+	public static List<Map<String, Object>> processAssertionList(RpcResult result, List<Map<String, Object>> output) {
+		
+		List<Map<String, Object>> resultresultList = result.getResultAsList();
+
+		resultresultList.forEach(map -> {
+			if (map.containsKey("data")) {
+				try {
+					String hash = ((String) map.get("key"));
+					String status = HexUtils.decode((String) map.get("data"));
+					List publishers = ((ArrayList) map.get("publishers"));
+					LOGGER.info("processAssertionList: " + hash + " " + publishers.size());
+					LOGGER.info("processAssertionList: " + status);
+					
+					if (publishers != null && !"null".equals(publishers)) {
+						Map<String, Object> dataMap = new HashMap<String, Object>();
+						dataMap.put("publishers", publishers);
+						dataMap.put("status", status);
+						output.add(dataMap);
+					}
+					
+				} catch (UnsupportedEncodingException | DecoderException e) {
 					LOGGER.error(e.getMessage(), e);
 				}
 			}

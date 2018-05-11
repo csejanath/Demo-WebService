@@ -47,7 +47,8 @@ public class ChainService {
 	
 	public enum Streams {
 		TC_REG1,
-		ETR_REG1
+		ETR_REG1,
+		ASSERTION_REG1
 	}
 	
 	private Registry registry;
@@ -216,7 +217,7 @@ public class ChainService {
 
 	}
 	
-	public List<Map<String, Object>> query(String hash, long size) throws IOException, URISyntaxException {
+	public List<Map<String, Object>> query(String hash, long size, String address) throws IOException, URISyntaxException {
 		
 		List<Map<String, Object>> output = new ArrayList<>();
 		registry.setStreamName(Streams.TC_REG1.toString());
@@ -226,11 +227,25 @@ public class ChainService {
 		if (output.size() > 0) {
 			Map<String, Object> dataMap = output.get(0);
 			if (dataMap.containsKey("fileSize") && (Long.parseLong((String)dataMap.get("fileSize")) == size)) {
-				dataMap.put("status", "Verified");
+				String status = "Verified";
+				dataMap.put("status", status);
+				registry.setStreamName(Streams.ASSERTION_REG1.toString());
+				registry.registerFile(hash, status, address);
 			}
+			
 		}
 		
 		return output;
 	}
 	
+	public List<Map<String, Object>> assertionList(String hash) throws IOException, URISyntaxException {
+		
+		List<Map<String, Object>> output = new ArrayList<>();
+		registry.setStreamName(Streams.ASSERTION_REG1.toString());
+		AppUtils.processAssertionList(registry.query(hash.toLowerCase()), output);
+		LOGGER.info("assertionList - count: " + output.size());
+		
+		return output;
+	}
+
 }
