@@ -9,8 +9,8 @@ import org.springframework.data.repository.CrudRepository;
  * @author Janath
  *
  */
-public interface LinkRepository extends CrudRepository<LinkDetail, Long> {
+public interface LinkRepository extends CrudRepository<LinkDetail, String> {
 	
-	LinkDetail findByLid(Long id);
+	LinkDetail findByLid(String id);
 
 }

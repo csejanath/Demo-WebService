@@ -11,8 +11,8 @@ import org.springframework.data.repository.CrudRepository;
  * @author Janath
  *
  */
-public interface TCRepository extends CrudRepository<TCDetail, Long> {
+public interface TCRepository extends CrudRepository<TCDetail, String> {
 	
-	TCDetail findByCid(Long id);
+	TCDetail findByCid(String id);
 
 }

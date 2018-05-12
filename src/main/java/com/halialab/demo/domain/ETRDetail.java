@@ -3,11 +3,15 @@
  */
 package com.halialab.demo.domain;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBAttribute;
+import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBHashKey;
+import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBTable;
+
+//import javax.persistence.Column;
+//import javax.persistence.Entity;
+//import javax.persistence.GeneratedValue;
+//import javax.persistence.GenerationType;
+//import javax.persistence.Id;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
@@ -15,39 +19,40 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
  * @author Janath
  *
  */
-@Entity
+//@Entity
+@DynamoDBTable(tableName = "ETR_TB")
 public class ETRDetail {
 	
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id", nullable = false, updatable = false)
-    private Long id;
+//    @Id
+//    @GeneratedValue(strategy = GenerationType.IDENTITY)
+//    @Column(name = "id", nullable = false, updatable = false)
+//    private Long id;
 
     // Username with unique constraint
-    @Column(name = "assetID", nullable = false, unique = true)
+//    @Column(name = "assetID", nullable = false, unique = true)
     private String assetID;
 
     @JsonIgnore
-    @Column(name = "fileName", nullable = false)
+//    @Column(name = "fileName", nullable = false)
     private String fileName;
 
-    @Column(name = "fileSize")
+//    @Column(name = "fileSize")
     private String fileSize;
     
     @JsonIgnore
-    @Column(name = "nickname")
+//    @Column(name = "nickname")
     private String nickname;
 
     @JsonIgnore
-    @Column(name = "remarks")
+//    @Column(name = "remarks")
     private String remarks;
     
     @JsonIgnore
-    @Column(name = "doc_type")
+//    @Column(name = "doc_type")
     private String doc_type;
     
     @JsonIgnore
-    @Column(name = "quantity", nullable = false)
+//    @Column(name = "quantity", nullable = false)
     private String quantity;
 
 	/**
@@ -60,20 +65,22 @@ public class ETRDetail {
 	/**
 	 * @return the id
 	 */
-	public Long getId() {
-		return id;
-	}
-
-	/**
-	 * @param id the id to set
-	 */
-	public void setId(Long id) {
-		this.id = id;
-	}
+//	@DynamoDBHashKey(attributeName = "Id")
+//	public Long getId() {
+//		return id;
+//	}
+//
+//	/**
+//	 * @param id the id to set
+//	 */
+//	public void setId(Long id) {
+//		this.id = id;
+//	}
 
 	/**
 	 * @return the assetID
 	 */
+	@DynamoDBHashKey(attributeName = "assetID")
 	public String getAssetID() {
 		return assetID;
 	}
@@ -88,6 +95,7 @@ public class ETRDetail {
 	/**
 	 * @return the filename
 	 */
+	@DynamoDBAttribute(attributeName = "FileName")
 	public String getFilename() {
 		return fileName;
 	}
@@ -102,6 +110,7 @@ public class ETRDetail {
 	/**
 	 * @return the filesize
 	 */
+	@DynamoDBAttribute(attributeName = "FileSize")
 	public String getFileSize() {
 		return fileSize;
 	}
@@ -116,6 +125,7 @@ public class ETRDetail {
 	/**
 	 * @return the nickname
 	 */
+	@DynamoDBAttribute(attributeName = "Nickname")
 	public String getNickname() {
 		return nickname;
 	}
@@ -130,6 +140,7 @@ public class ETRDetail {
 	/**
 	 * @return the remarks
 	 */
+	@DynamoDBAttribute(attributeName = "Remarks")
 	public String getRemarks() {
 		return remarks;
 	}
@@ -144,6 +155,7 @@ public class ETRDetail {
 	/**
 	 * @return the doc_type
 	 */
+	@DynamoDBAttribute(attributeName = "Doc_type")
 	public String getDoc_type() {
 		return doc_type;
 	}
@@ -158,6 +170,7 @@ public class ETRDetail {
 	/**
 	 * @return the quantity
 	 */
+	@DynamoDBAttribute(attributeName = "Quantity")
 	public String getQuantity() {
 		return quantity;
 	}

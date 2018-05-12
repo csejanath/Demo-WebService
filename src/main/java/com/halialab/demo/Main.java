@@ -19,6 +19,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.halialab.demo.domain.User;
 import com.halialab.demo.domain.UserRepository;
+import com.halialab.demo.domain.dynamodb.Customer;
+import com.halialab.demo.domain.dynamodb.CustomerRepository;
 import com.halialab.demo.registry.Asset;
 import com.halialab.demo.registry.Registry;
 import com.halialab.demo.service.ChainService;
@@ -93,6 +95,12 @@ public class Main extends SpringBootServletInitializer {
 				
 				urepository.save(user1);
 				urepository.save(user2);
+				
+//				repository.save(new Customer("JSA-1", "Janath", "Raveendra"));
+//				repository.save(new Customer("JSA-2", "Ranali", "Eshwarage"));
+//				repository.save(new Customer("JSA-3", "Kim", "Smith"));
+//				repository.save(new Customer("JSA-4", "David", "Williams"));
+				
 			} catch (Exception e) {
 				LOGGER.error(e.getMessage());
 				// TODO Auto-generated catch block

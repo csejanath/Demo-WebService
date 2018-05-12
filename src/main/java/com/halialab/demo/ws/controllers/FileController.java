@@ -51,7 +51,7 @@ public class FileController {
 			LOGGER.info("############### registerFile - fileMetadata ##################### " + toJson(fileMetadata));
 		}
 
-		User curruser = repository.findByUsername(auth.getName());
+		User curruser = repository.findByUsername(auth.getName()).get(0);
 
 		return toJson(chainService.registerFile(hash, fileMetadata, curruser.getAddress()));
 	}
@@ -65,7 +65,7 @@ public class FileController {
 			// userDetails = auth.getPrincipal()
 		}
 
-		User curruser = repository.findByUsername(auth.getName());
+		User curruser = repository.findByUsername(auth.getName()).get(0);
 		
 		return GsonUtils.toJson(chainService.query(hash, size, curruser.getAddress()));
 	}
@@ -78,7 +78,7 @@ public class FileController {
 			LOGGER.info("############### list - Athenticated ##################### " + auth.getName());
 		}
 
-		User curruser = repository.findByUsername(auth.getName());
+		User curruser = repository.findByUsername(auth.getName()).get(0);
 
 		return GsonUtils.toJson(chainService.list(curruser.getAddress()));
 	}
@@ -91,8 +91,8 @@ public class FileController {
 			LOGGER.info("############### transfer - Athenticated ##################### " + auth.getName());
 		}
 
-		User curruser = repository.findByUsername(auth.getName());
-		User otheruser = repository.findByUsername(fileMetadata.getOtherUsername());
+		User curruser = repository.findByUsername(auth.getName()).get(0);
+		User otheruser = repository.findByUsername(fileMetadata.getOtherUsername()).get(0);
 
 		return GsonUtils.toJson(chainService.SendAsset(hash, curruser.getAddress(), otheruser.getAddress(), Integer.parseInt(fileMetadata.getQuantity())));
 	}
@@ -105,7 +105,7 @@ public class FileController {
 			LOGGER.info("############### cancel - Athenticated ##################### " + auth.getName());
 		}
 
-		User curruser = repository.findByUsername(auth.getName());
+		User curruser = repository.findByUsername(auth.getName()).get(0);
 
 		return GsonUtils.toJson(chainService.cancelAsset(hash, Integer.parseInt(fileMetadata.getQuantity())));
 	}
@@ -131,7 +131,7 @@ public class FileController {
 			LOGGER.info("############### registerFileWithLink - fileMetadata ##################### " + toJson(fileMetadata));
 		}
 
-		User curruser = repository.findByUsername(auth.getName());
+		User curruser = repository.findByUsername(auth.getName()).get(0);
 
 		return toJson(chainService.registerFileWithLink(hash, fileMetadata, curruser.getAddress()));
 	}

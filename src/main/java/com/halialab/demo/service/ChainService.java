@@ -125,7 +125,7 @@ public class ChainService {
 	        tcDetail.setDoc_type(metadata.getDoc_type());
 	        tcRepository.save(tcDetail);
 	        
-	        Long id = tcDetail.getCid();
+	        String id = tcDetail.getCid();
 	        LOGGER.info("registerFile TC id: " + id);
 			
 			registry.setStreamName(Streams.TC_REG1.toString());
@@ -254,7 +254,7 @@ public class ChainService {
         
         linkRepository.save(linkDetail);
         
-        Long id = linkDetail.getLid();
+        String id = linkDetail.getLid();
         LOGGER.info("registerFileWithLink id : " + id);
 		
 		//publish in the link stream

@@ -27,6 +27,12 @@ chainrpc:
   burnAddress : 1XXXXXXXLXXXXXXXNhXXXXXXfjXXXXXXYHa8tT
 server: 
   port: 8090
+amazon:
+  dynamodb:
+    endpoint : http://localhost:8000/
+  aws:
+    accesskey : jsa
+    secretkey : javasampleapproach
 ---
 spring:
   profiles: aws
@@ -53,3 +59,9 @@ chainrpc:
   burnAddress : 1XXXXXXWWXXXXXXXFJXXXXXXTKXXXXXXTn2K8q
 server:
   port: 8090
+amazon:
+  dynamodb:
+    endpoint : http://localhost:8000/
+  aws:
+    accesskey : jsa
+    secretkey : javasampleapproach

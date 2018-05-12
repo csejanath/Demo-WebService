@@ -47,7 +47,7 @@ public class AppUtils {
 					// ((Number)dataMap.get("size")).longValue() == size) {
 					String data;
 					try {
-						data = toJson(tcRepository.findByCid(Long.parseLong(id)));
+						data = toJson(tcRepository.findByCid(id));
 					} catch (NumberFormatException e) {
 						data = id;
 						LOGGER.error(e.getMessage());
@@ -187,7 +187,7 @@ public class AppUtils {
 					
 					String data;
 					try {
-						data = toJson(linkRepository.findByLid(Long.parseLong(lid)));
+						data = toJson(linkRepository.findByLid(lid));
 					} catch (NumberFormatException e) {
 						data = lid;
 						LOGGER.error(e.getMessage());

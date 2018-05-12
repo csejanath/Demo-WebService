@@ -5,13 +5,13 @@ package com.halialab.demo.ws.config;
 
 import java.util.Arrays;
 
-import org.aspectj.weaver.ast.And;
+//import org.aspectj.weaver.ast.And;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.domain.EntityScan;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
+//import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -37,7 +37,7 @@ import com.halialab.demo.ws.controllers.UserDetailServiceImpl;
 @EnableGlobalMethodSecurity(prePostEnabled=true)
 @Configuration
 @EnableWebSecurity
-@EnableJpaRepositories(basePackageClasses= UserRepository.class)
+//@EnableJpaRepositories(basePackageClasses= UserRepository.class)
 @ComponentScan(basePackages = { "com.halialab.demo.*" })
 @EntityScan("com.halialab.demo.*")
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
