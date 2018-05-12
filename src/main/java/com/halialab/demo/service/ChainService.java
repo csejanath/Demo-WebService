@@ -3,39 +3,27 @@
  */
 package com.halialab.demo.service;
 
-import static com.halialab.demo.util.GsonUtils.toJson;
-import static com.halialab.demo.util.StreamUtils.listStreamKeyItems;
-import static com.halialab.demo.util.StreamUtils.liststreampublisheritems;
-import static com.halialab.demo.util.StreamUtils.publish;
-
 import java.io.IOException;
-import java.io.UnsupportedEncodingException;
 import java.net.URISyntaxException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
-import org.apache.commons.codec.DecoderException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Bean;
 
-import com.halialab.demo.Main;
 import com.halialab.demo.domain.ETRDetail;
 import com.halialab.demo.domain.ETRRepository;
+import com.halialab.demo.domain.LinkDetail;
+import com.halialab.demo.domain.LinkRepository;
 import com.halialab.demo.domain.TCDetail;
 import com.halialab.demo.domain.TCRepository;
 import com.halialab.demo.model.FileMetadata;
 import com.halialab.demo.model.RpcResult;
 import com.halialab.demo.registry.Registry;
 import com.halialab.demo.util.AppUtils;
-import com.halialab.demo.util.GsonUtils;
-import com.halialab.demo.util.HexUtils;
-import com.halialab.demo.ws.pojo.ChainRpcProperties;
 
 /**
  * @author Janath
@@ -48,7 +36,9 @@ public class ChainService {
 	public enum Streams {
 		TC_REG1,
 		ETR_REG1,
-		ASSERTION_REG1
+		ASSERTION_REG1,
+		LINK_F_REG1,
+		LINK_B_REG1
 	}
 	
 	private Registry registry;
@@ -58,6 +48,9 @@ public class ChainService {
 	
 	@Autowired
 	TCRepository tcRepository;
+	
+	@Autowired
+	LinkRepository linkRepository;
 	
 	public ChainService (Registry registry) {
 		this.registry = registry;
@@ -247,5 +240,38 @@ public class ChainService {
 		
 		return output;
 	}
+	
+	public RpcResult registerFileWithLink(String hash, FileMetadata metadata, String address) throws IOException, URISyntaxException {
+
+		registerFile(hash, metadata, address);
+		
+		//save link details in db
+        LinkDetail linkDetail = new LinkDetail();
+        linkDetail.setFileName(metadata.getLinkFilename());
+        linkDetail.setFileSize(metadata.getLinkFilesize());
+        linkDetail.setType(metadata.getLinkType());
+        linkDetail.setHash(metadata.getLinkHash());
+        
+        linkRepository.save(linkDetail);
+        
+        Long id = linkDetail.getLid();
+        LOGGER.info("registerFileWithLink id : " + id);
+		
+		//publish in the link stream
+		registry.setStreamName(Streams.LINK_F_REG1.toString());
+		return (registry.registerFile(hash, id, address));
+
+	}
+
+	public List<Map<String, Object>> linkList(String hash) throws IOException, URISyntaxException {
+		
+		List<Map<String, Object>> output = new ArrayList<>();
+		registry.setStreamName(Streams.LINK_F_REG1.toString());
+		AppUtils.processLinkList(registry.query(hash.toLowerCase()), output, linkRepository);
+		LOGGER.info("linkList - count: " + output.size());
+		
+		return output;
+	}
+	
 
 }

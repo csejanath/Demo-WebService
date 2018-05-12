@@ -28,6 +28,12 @@ public class FileMetadata implements Serializable {
 	  private String quantity;
 	  private String otherUsername;
 	  
+	  //for links
+	  private String linkFilename;
+	  private String linkFilesize;
+	  private String linkType;
+	  private String linkHash;
+	  
 	  private String otherData;
 	  
 	  public String getMethod() {
@@ -167,6 +173,54 @@ public class FileMetadata implements Serializable {
 	 */
 	public void setOtherUsername(String otherUsername) {
 		this.otherUsername = otherUsername;
+	}
+	/**
+	 * @return the linkFilename
+	 */
+	public String getLinkFilename() {
+		return linkFilename;
+	}
+	/**
+	 * @param linkFilename the linkFilename to set
+	 */
+	public void setLinkFilename(String linkFilename) {
+		this.linkFilename = linkFilename;
+	}
+	/**
+	 * @return the linkFilesize
+	 */
+	public String getLinkFilesize() {
+		return linkFilesize;
+	}
+	/**
+	 * @param linkFilesize the linkFilesize to set
+	 */
+	public void setLinkFilesize(String linkFilesize) {
+		this.linkFilesize = linkFilesize;
+	}
+	/**
+	 * @return the linkType
+	 */
+	public String getLinkType() {
+		return linkType;
+	}
+	/**
+	 * @param linkType the linkType to set
+	 */
+	public void setLinkType(String linkType) {
+		this.linkType = linkType;
+	}
+	/**
+	 * @return the linkHash
+	 */
+	public String getLinkHash() {
+		return linkHash;
+	}
+	/**
+	 * @param linkHash the linkHash to set
+	 */
+	public void setLinkHash(String linkHash) {
+		this.linkHash = linkHash;
 	}
 
 	}

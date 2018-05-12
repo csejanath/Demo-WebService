@@ -18,6 +18,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.halialab.demo.domain.ETRRepository;
+import com.halialab.demo.domain.LinkRepository;
 import com.halialab.demo.domain.TCRepository;
 import com.halialab.demo.model.RpcResult;
 import com.halialab.demo.registry.Registry;
@@ -174,4 +175,35 @@ public class AppUtils {
 		return output;
 	}
 
+	public static List<Map<String, Object>> processLinkList(RpcResult result, List<Map<String, Object>> output, LinkRepository linkRepository) {
+		
+		List<Map<String, Object>> resultresultList = result.getResultAsList();
+
+		resultresultList.forEach(map -> {
+			if (map.containsKey("data")) {
+				try {
+					String lid = HexUtils.decode((String) map.get("data"));
+					LOGGER.info("processLinkList: " + lid);
+					
+					String data;
+					try {
+						data = toJson(linkRepository.findByLid(Long.parseLong(lid)));
+					} catch (NumberFormatException e) {
+						data = lid;
+						LOGGER.error(e.getMessage());
+					}
+					
+					if (data != null && !"null".equals(data)) {
+						Map<String, Object> dataMap = GsonUtils.fromJsonToMap(data);
+						output.add(dataMap);
+					}
+					
+				} catch (UnsupportedEncodingException | DecoderException e) {
+					LOGGER.error(e.getMessage(), e);
+				}
+			}
+		});
+		return output;
+	}
+	
 }
